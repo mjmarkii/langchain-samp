@@ -229,7 +229,7 @@ Be concise but specific. Each row should capture a unique instance of value crea
 
 # STREAMLIT APPLICATION INTERFACE
 def main():
-    st.set_page_config(page_title="Performance Review Generator", layout="wide")
+    st.set_page_config(page_title="Performance Review Generator - Impact Highlights", layout="wide")
     st.title("📋 Performance Review Briefing Generator")
 
     # SIDEBAR: REVIEW CONTEXT CONFIGURATION
@@ -294,7 +294,6 @@ def main():
 
         # Display the generated performance review and usage statistics
         st.success("✅ Report Ready!")
-        st.subheader("🌟 Impact Highlights")
         st.markdown(result)
 
         # Expandable section showing detailed token usage and cost information
