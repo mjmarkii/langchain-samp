@@ -11,12 +11,12 @@ from langchain_community.callbacks import get_openai_callback
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-# Check if API key is available
+# Validate API key availability before proceeding
 if not openai_api_key:
     st.error("Please set your OPENAI_API_KEY in the .env file.")
     st.stop()
 
-# SYSTEM message (internal behavior instructions)
+# SYSTEM PROMPT
 system_message = """
 Your goal is to **analyze source files and produce a concise, neutral report that surfaces recurring positive performance patterns.**
 
@@ -40,9 +40,9 @@ Your goal is to **analyze source files and produce a concise, neutral report tha
 #### Impact Highlights
 - Use the **Positive Impact Level Rubric** and the **Positive Pattern Detection Guidance** rubrics as internal guidance for analysis
 - Only surface recurring patterns internally rated Impact Level 3 to 5. Do not reference these numbers in the final output.
-- Do **NOT** display impact level numbers or rubric names (e.g., “Level 3”) in the final report. Use descriptive labels (“Reliable”, “Trusted”, or “Inspiring”) **only in plain English**, and only when appropriate.
+- Do **NOT** display impact level numbers or rubric names (e.g., "Level 3") in the final report. Use descriptive labels ("Reliable", "Trusted", or "Inspiring") **only in plain English**, and only when appropriate.
 - For every issue in the **Impact Highlights** section:
-  - Clearly explain **why the pattern qualifies as recurring** (e.g., “seen 3 times across retros”)
+  - Clearly explain **why the pattern qualifies as recurring** (e.g., "seen 3 times across retros")
   - Reflect not just on **what was achieved**, but **how it was achieved** (clarity, ownership, collaboration).
   - Focus on **specific, observable moments** where {team_member} created value for the team or project.
   - Provide **proof of at least 3 separate instances**
@@ -88,7 +88,7 @@ Your goal is to **analyze source files and produce a concise, neutral report tha
 - A strong signal of positive influence  
 
 **Examples**:
-- Reviews others’ work with clear, timely suggestions  
+- Reviews others' work with clear, timely suggestions  
 - Spots and flags problems early with helpful ideas to solve them  
 - Steps in to help a teammate and makes sure they understand for next time  
 ⭐ **Level 4 – Trusted / High Impact**
@@ -147,7 +147,7 @@ If unsure or data is incomplete, respond:
 > "I don't have enough information to answer this accurately."
 """
 
-# HUMAN message (combined content and instructions)
+# USER PROMPT (combined content and instructions)
 human_message_template = """
 ## Variables
 
@@ -162,7 +162,7 @@ human_message_template = """
 
 You are a highly skilled engineering performance analyst. Your task is to examine raw data from the provided files—these may include daily reports, meeting transcripts, JIRA tickets, and HTML content—spanning the period of **{date_range}**.
 
-Your objective is to generate a comprehensive **Performance Review Briefing** for **{manager}**, offering clear, context-rich insights into **{team_member}**’s contributions, behavioral patterns, and any friction points observed during this period that may need **{manager}**'s attention.
+Your objective is to generate a comprehensive **Performance Review Briefing** for **{manager}**, offering clear, context-rich insights into **{team_member}**'s contributions, behavioral patterns, and any friction points observed during this period that may need **{manager}**'s attention.
 
 This report is designed to support a high-impact 1-on-1 conversation between the manager and the team member. It should help the manager:
 - Recognize and highlight key contributions and achievements  
@@ -222,13 +222,13 @@ Present your findings as a **markdown-formatted list**, where each item captures
 
 #### **[Positive Behavior Observed**]: Name the standout behavior or habit (e.g., proactive handoff updates, offering guidance to peers, sharing blockers with options).
   - **Impact Level**: The impact level description of the issue (e.g., Reliable / Uplifting, Trusted / High Impact, or Inspiring / Teamwide Influence).
-  - **Frequency**: How often this was observed (e.g., “3 instances across sprint reports and check-ins”).
+  - **Frequency**: How often this was observed (e.g., "3 instances across sprint reports and check-ins").
   - **Evidences**: Up to 3 direct quotes, paraphrased examples, or observable actions that illustrate the behavior.
   - **How It Was Achieved**: Describe the specific actions, habits, or decisions that led to the behavior (e.g., set reminders, followed through without prompts, created a checklist).
   - **Strengths Shown**: Name relevant strengths (e.g., Ownership, Clear Communication, Mentorship, Collaboration).
   - **Team Impact**: Explain how it helped the team move faster, coordinate better, reduce stress, or increase trust.
   - **Who Benefited**: Identify teammates, roles, or sub-teams that received value — or leave blank if unknown.
-  - **Why It Mattered**: Connect the impact to project outcomes, progress, or team health (e.g., “kept project unblocked”, “helped newer teammate contribute sooner”).
+  - **Why It Mattered**: Connect the impact to project outcomes, progress, or team health (e.g., "kept project unblocked", "helped newer teammate contribute sooner").
   - **Reinforcement Action**: Suggest what a manager could do to amplify the strength (e.g., public recognition, offer scope increase, encourage sharing in retro, use it as a model).
 Be concise but specific. Each row should capture a unique instance of value creation or collaboration.
 
@@ -236,10 +236,14 @@ Be concise but specific. Each row should capture a unique instance of value crea
 
 """
 
+# STREAMLIT APPLICATION INTERFACE
 def main():
     st.set_page_config(page_title="Performance Review Generator", layout="wide")
     st.title("📋 Performance Review Briefing Generator")
 
+    # SIDEBAR: REVIEW CONTEXT CONFIGURATION
+    # Sidebar contains the essential context variables needed for generating
+    # personalized performance reviews
     with st.sidebar:
         st.header("🧠 Review Context")
         manager = st.text_input("Manager", value="Cleo Credo")
@@ -248,30 +252,37 @@ def main():
         date_range = st.text_input("Date Range", value="April 1, 2025 - June 30, 2025")
         run = st.button("🚀 Generate Review")
 
+    # MAIN CONTENT: DATA INPUT SECTIONS
+    # These text areas allow users to paste different types of source data
+    # that will be analyzed to generate the performance review
     st.subheader("📝 Paste Inputs (All Required)")
     daily_text = st.text_area("📆 Daily Status Updates", height=200)
     claap_text = st.text_area("🎙️ Claap Transcripts", height=200)
     fathom_text = st.text_area("📼 Fathom Transcripts", height=200)
     jira_text = st.text_area("🛠 JIRA Tickets", height=200)
 
+    # PROCESSING AND RESULTS GENERATION
     if run:
+        # Validate that all required inputs are provided
         if not all([daily_text, claap_text, fathom_text, jira_text]):
             st.warning("⚠️ Please fill in all input sections.")
             return
 
         st.info("Generating performance report...")
 
+        # Initialize OpenAI language model with specific configuration
         llm = ChatOpenAI(model="gpt-4.1", temperature=0)
 
-        # Create unified prompt
+        # Create the prompt template combining system and human messages
         chat_prompt = ChatPromptTemplate.from_messages([
             SystemMessagePromptTemplate.from_template(system_message),
             HumanMessagePromptTemplate.from_template(human_message_template)
         ])
 
+        # Create the LangChain processing chain
         chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="final_output")
 
-        # Track token usage
+        # Execute the chain with token usage tracking for cost monitoring
         with get_openai_callback() as cb:
             result = chain.run({
                 "manager": manager,
@@ -284,20 +295,24 @@ def main():
                 "jira_text": jira_text
             })
 
+            # Extract token usage metrics for cost tracking
             total_tokens = cb.total_tokens
             prompt_tokens = cb.prompt_tokens
             completion_tokens = cb.completion_tokens
             cost = cb.total_cost
 
+        # Display the generated performance review and usage statistics
         st.success("✅ Report Ready!")
         st.subheader("🌟 Impact Highlights")
         st.markdown(result)
 
+        # Expandable section showing detailed token usage and cost information
         with st.expander("📊 Token Usage"):
             st.write(f"**Prompt tokens:** {prompt_tokens}")
             st.write(f"**Completion tokens:** {completion_tokens}")
             st.write(f"**Total tokens:** {total_tokens}")
             st.write(f"**Estimated cost (USD):** ${cost:.5f}")
 
+# main fn call
 if __name__ == "__main__":
     main()
