@@ -250,8 +250,14 @@ Be concise but specific. Each row should capture a unique instance of value crea
 @traceable(name="performance_review_generation", tags=["performance", "review"], run_type="llm")
 def generate_performance_review(chain_inputs, chain, session_id):
     """Generate performance review with LangSmith tracing."""
-    # Add session_id to metadata
-    metadata = {**chain_inputs, "session_id": session_id}
+    # Create metadata with only the key fields (excluding long text inputs)
+    metadata = {
+        "session_id": session_id,
+        "manager": chain_inputs["manager"],
+        "team_member": chain_inputs["team_member"],
+        "role": chain_inputs["role"],
+        "date_range": chain_inputs["date_range"]
+    }
     
     with trace(name="chain_execution", metadata=metadata):
         return chain.run(chain_inputs)
