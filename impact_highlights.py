@@ -149,15 +149,6 @@ If unsure or data is incomplete, respond:
 
 # USER PROMPT (combined content and instructions)
 human_message_template = """
-## Variables
-
-- **MANAGER**: {manager}
-- **TEAM_MEMBER**: {team_member}
-- **ROLE_TEAM_MEMBER**: {role}
-- **DATE_RANGE**: {date_range}
-
----
-
 ## 🎯 Context
 
 You are a highly skilled engineering performance analyst. Your task is to examine raw data from the provided files—these may include daily reports, meeting transcripts, JIRA tickets, and HTML content—spanning the period of **{date_range}**.
