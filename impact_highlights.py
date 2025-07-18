@@ -20,6 +20,8 @@ if langsmith_api_key:
     os.environ["LANGSMITH_TRACING_V2"] = "true"
     os.environ["LANGSMITH_API_KEY"] = langsmith_api_key
     os.environ["LANGSMITH_PROJECT"] = langsmith_project
+else:
+    st.warning("LANGSMITH_API_KEY not found. Tracing will be disabled.")
 
 # Validate API key availability before proceeding
 if not openai_api_key:
