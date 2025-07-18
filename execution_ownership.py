@@ -17,7 +17,7 @@ langsmith_project = os.getenv("LANGSMITH_PROJECT", "execution-ownership-generato
 
 # Set up LangSmith
 if langsmith_api_key:
-    os.environ["LANGCHAIN_TRACING_V2"] = "true"
+    os.environ["LANGSMITH_TRACING_V2"] = "true"
     os.environ["LANGSMITH_API_KEY"] = langsmith_api_key
     os.environ["LANGSMITH_PROJECT"] = langsmith_project
 else:
