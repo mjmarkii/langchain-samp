@@ -60,12 +60,11 @@ def create_master_sequential_chain():
 
 def run_master_chain():
     """Run the master chain with the input variables and handle output."""
-    print("Starting master chain execution...")
     
     # Create the master chain
     master_chain = create_master_sequential_chain()
     
-    print("Running chain 1: Wins Work Challenges...")
+    print("Running each chain in sequence...")
     
     # Run the chain with input variables
     result = master_chain({
@@ -77,12 +76,6 @@ def run_master_chain():
         "fathom_text": FATHOM_TEXT,
         "jira_text": JIRA_TEXT
     })
-    
-    print("Chain 1 completed successfully!")
-    print("Running chain 2: Rating Action Plan...")
-    print("Chain 2 completed successfully!")
-    print("Running chain 3: Executive Summary...")
-    print("Chain 3 completed successfully!")
     
     print("All chains completed! Writing results to output.py...")
     
