@@ -38,9 +38,12 @@ A Streamlit-based performance review generator that uses LangChain and OpenAI's 
    - Go to your profile settings
    - Copy your API key
 
+5. **Ask for the datasource file from devs**
+   - You need this to run the app
+
 5. **Run the app:**
    ```bash
-   streamlit run impact_highlights.py
+   python master_chain.py
    ```
 
 ## LangSmith Features
