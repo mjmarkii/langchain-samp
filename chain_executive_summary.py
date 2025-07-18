@@ -10,14 +10,6 @@ from variables import *
 from prompts import executive_summary as es
 from datasource import *
 
-# Read the contents of output.py
-try:
-    with open("output.py", "r", encoding="utf-8") as f:
-        performance_signals_outputs = f.read()
-except FileNotFoundError:
-    performance_signals_outputs = ""
-    print("Warning: output.py not found. Using empty content.")
-
 # Load environment variables from .env
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
