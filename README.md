@@ -41,9 +41,14 @@ A Streamlit-based performance review generator that uses LangChain and OpenAI's 
 5. **Ask for the datasource file from devs**
    - You need this to run the app
 
-5. **Run the app:**
+6. **Run the app:**
    ```bash
    python master_chain.py
+   ```
+
+7. To generate the final report, run:
+   ```bash
+   streamlit run generate_final_report.py
    ```
 
 ## LangSmith Features
