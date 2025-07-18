@@ -13,7 +13,7 @@ from langsmith import traceable, trace
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 langsmith_api_key = os.getenv("LANGSMITH_API_KEY")
-langsmith_project = os.getenv("LANGSMITH_PROJECT", "performance-review-generator")
+langsmith_project = os.getenv("LANGSMITH_PROJECT", "impact-highlights-generator")
 
 # Set up LangSmith
 if langsmith_api_key:
