@@ -18,8 +18,8 @@ langsmith_project = os.getenv("LANGSMITH_PROJECT", "execution-ownership-generato
 # Set up LangSmith
 if langsmith_api_key:
     os.environ["LANGCHAIN_TRACING_V2"] = "true"
-    os.environ["LANGCHAIN_API_KEY"] = langsmith_api_key
-    os.environ["LANGCHAIN_PROJECT"] = langsmith_project
+    os.environ["LANGSMITH_API_KEY"] = langsmith_api_key
+    os.environ["LANGSMITH_PROJECT"] = langsmith_project
 else:
     st.warning("LANGSMITH_API_KEY not found. Tracing will be disabled.")
 

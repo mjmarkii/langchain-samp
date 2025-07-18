@@ -18,8 +18,8 @@ langsmith_project = os.getenv("LANGSMITH_PROJECT", "performance-review-generator
 # Set up LangSmith
 if langsmith_api_key:
     os.environ["LANGCHAIN_TRACING_V2"] = "true"
-    os.environ["LANGCHAIN_API_KEY"] = langsmith_api_key
-    os.environ["LANGCHAIN_PROJECT"] = langsmith_project
+    os.environ["LANGSMITH_API_KEY"] = langsmith_api_key
+    os.environ["LANGSMITH_PROJECT"] = langsmith_project
 
 # Validate API key availability before proceeding
 if not openai_api_key:
