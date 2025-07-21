@@ -6,7 +6,7 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain.chains import LLMChain
 
-from prompts.prompt_perf_rating import SYSTEM_PROMPT, USER_PROMPT
+from prompts.prompt_action_plan import SYSTEM_PROMPT, USER_PROMPT
 
 # Load environment variables from .env
 load_dotenv()
