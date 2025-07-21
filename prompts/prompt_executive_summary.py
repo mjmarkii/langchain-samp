@@ -21,54 +21,44 @@ Your goal is to **analyze source files and produce a concise, neutral report tha
 
 Analyze the following sources in combination:
 
-#### Daily Status Updates:
-<<START OF DAILY STATUS UPDATES>>
-{daily_text}
-<<END OF DAILY STATUS UPDATES>>
+#### Impact Highlights:
+<<START OF IMPACT HIGHLIGHTS>>
+{impact_highlights}
+<<END OF IMPACT HIGHLIGHTS>>
 
 ---
 
-#### Claap Transcripts:
-<<START OF CLAAP TRANSCRIPTS>>
-{claap_text}
-<<END OF CLAAP TRANSCRIPTS>>
+#### Execution and Ownership:
+<<START OF EXECUTION AND OWNERSHIP>>
+{execution_ownership}
+<<END OF EXECUTION AND OWNERSHIP>>
 
 ---
 
-#### Fathom Transcripts:
-<<START OF FATHOM TRANSCRIPTS>>
-{fathom_text}
-<<END OF FATHOM TRANSCRIPTS>>
+#### Gaps and Growth Areas:
+<<START OF GAPS AND GROWTH AREAS>>
+{gaps_growth_areas}
+<<END OF GAPS AND GROWTH AREAS>>
 
 ---
 
-#### JIRA Tickets:
-<<START OF JIRA TICKETS>>
-{jira_text}
-<<END OF JIRA TICKETS>>
+#### Performance Rating:
+<<START OF PERFORMANCE RATING>>
+{performance_rating}
+<<END OF PERFORMANCE RATING>>
 
 ---
 
-#### Wins, Work, Challenges:
-<<START OF WINS, WORK, CHALLENGES>>
-{wins_work_challenges}
-<<END OF WINS, WORK, CHALLENGES>>
-
----
-
-#### Ratings and Action Plan:
-<<START OF RATINGS AND ACTION PLAN>>
-{rating_action_plan}
-<<END OF RATINGS AND ACTION PLAN>>
+#### Manager Action Plan:
+<<START OF MANAGER ACTION PLAN>>
+{action_plan}
+<<END OF MANAGER ACTION PLAN>>
   
 ---
 
 ### 🔍 Analysis Instructions
-- Use the **Performance Ratings Snapshot** as a signal summary — not the final answer. Cross-reference with behavior patterns and real examples in the other sources to **add context, nuance, and depth**.
-- Treat `wins_work_challenges` and `rating_action_plan` as a **curated observation log** — validate and enrich its insights using raw data from:
-  - `Daily_Status_Updates`: Look for consistency, ownership, blockers raised, or behavioral changes over time.
-  - `Jira_Tickets`: Look for accountability, throughput, problem-solving, or technical ownership.
-  - `Meeting_Transcripts`: Look for initiative, peer interactions, tension points, or support moments.
+- Use the **Performance Rating** and **Manager Action Plan** as a signal summary — not the final answer. Cross-reference with behavior patterns and real examples in the other sources to **add context, nuance, and depth**.
+- Treat `impact_highlights`, `execution_ownership`, and `gaps_growth_areas` as a **curated observation log**
 - Use these sources to generate a clear, evidence-based **🔍 Executive Summary** of the team member's performance during **{date_range}**.
 - This summary is intended for their manager — to offer a focused readout of what's working, where value was delivered, and if applicable, where attention may be needed.
 
