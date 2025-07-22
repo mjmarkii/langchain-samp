@@ -227,7 +227,7 @@ This report is designed to support a high-impact 1-on-1 conversation between the
 
 ### ⚠️ Gaps & Growth Areas
 
-Highlight any **recurring**, **unresolved**, or **high-severity** challenges that were directly attributable to **{team_member}** during **{date_range}**.
+Highlight up to 5 **recurring**, **unresolved**, or **high-severity** challenges that were directly attributable to **{team_member}** during **{date_range}**. 
 
 This section is designed to support **constructive growth**, not evaluation or blame. Use it to help **{manager}** understand the team member's current struggles so they can offer the right support, realignment, or enablement.
 
