@@ -30,7 +30,6 @@ if not openai_api_key:
 class TracedImpactHighlightsChain(LLMChain):
     """LLMChain wrapper that adds metadata to execution traces."""
     
-    @traceable(tags=["prompt-analysis", "wins", "impact-highlights"], run_type="llm")
     def __call__(self, inputs, return_only_outputs=False, callbacks=None, **kwargs):
         """Execute with metadata for LangSmith tracing."""
         print("Running chain 1/6: Impact Highlights...")

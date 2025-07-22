@@ -30,7 +30,6 @@ if not openai_api_key:
 class TracedPerformanceRatingChain(LLMChain):
     """LLMChain wrapper that adds metadata to execution traces."""
     
-    @traceable(tags=["prompt-analysis", "performance", "rating-assessment"], run_type="llm")
     def __call__(self, inputs, return_only_outputs=False, callbacks=None, **kwargs):
         """Execute with metadata for LangSmith tracing."""
         print("Running chain 4/6: Performance Rating...")

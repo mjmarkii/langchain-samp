@@ -30,7 +30,6 @@ if not openai_api_key:
 class TracedExecutionOwnershipChain(LLMChain):
     """LLMChain wrapper that adds metadata to execution traces."""
     
-    @traceable(tags=["prompt-analysis", "work", "execution-ownership"], run_type="llm")
     def __call__(self, inputs, return_only_outputs=False, callbacks=None, **kwargs):
         """Execute with metadata for LangSmith tracing."""
         print("Running chain 2/6: Execution and Ownership...")
