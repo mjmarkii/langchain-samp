@@ -40,7 +40,7 @@ def create_wins_chain():
     ])
 
     # Create and return the LangChain processing chain
-    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="impact_highlights")
+    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="impact_highlights", verbose=True)
 
     return chain
 

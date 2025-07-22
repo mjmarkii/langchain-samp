@@ -40,7 +40,7 @@ def create_work_chain():
     ])
 
     # Create and return the LangChain processing chain
-    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="execution_ownership")
+    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="execution_ownership", verbose=True)
 
     return chain
 

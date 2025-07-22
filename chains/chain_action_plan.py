@@ -40,7 +40,7 @@ def create_action_plan_chain():
     ])
 
     # Create and return the LangChain processing chain
-    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="action_plan")
+    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="action_plan", verbose=True)
 
     return chain
 

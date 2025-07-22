@@ -41,7 +41,7 @@ def create_executive_summary_chain():
     ])
 
     # Create and return the LangChain processing chain
-    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="executive_summary")
+    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="executive_summary", verbose=True)
 
     return chain
 

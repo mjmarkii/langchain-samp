@@ -40,7 +40,7 @@ def create_challenges_chain():
     ])
 
     # Create and return the LangChain processing chain
-    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="gaps_growth_areas")
+    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="gaps_growth_areas", verbose=True)
 
     return chain
 

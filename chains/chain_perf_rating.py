@@ -40,7 +40,7 @@ def create_perf_rating_chain():
     ])
 
     # Create and return the LangChain processing chain
-    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="performance_rating")
+    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="performance_rating", verbose=True)
 
     return chain
 
