@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain.chains import LLMChain
-from langsmith import traceable
+from langsmith import traceable, trace
 
 from prompts.prompt_work import SYSTEM_PROMPT, USER_PROMPT
 
@@ -34,9 +34,6 @@ class TracedExecutionOwnershipChain(LLMChain):
         """Execute with metadata for LangSmith tracing."""
         print("Running chain 2/6: Execution and Ownership...")
         
-        from langsmith import trace
-        
-        # Add metadata for this specific prompt execution
         metadata = {
             "chain_name": "execution_ownership",
             "prompt_type": "work_analysis",

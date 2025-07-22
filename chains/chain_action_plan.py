@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain.chains import LLMChain
-from langsmith import traceable
+from langsmith import traceable, trace
 
 from prompts.prompt_action_plan import SYSTEM_PROMPT, USER_PROMPT
 
@@ -33,8 +33,6 @@ class TracedActionPlanChain(LLMChain):
     def __call__(self, inputs, return_only_outputs=False, callbacks=None, **kwargs):
         """Execute with metadata for LangSmith tracing."""
         print("Running chain 5/6: Action Plan...")
-        
-        from langsmith import trace
         
         # Add metadata for this specific prompt execution
         metadata = {

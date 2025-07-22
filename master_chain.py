@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 from langchain_openai import ChatOpenAI
 from langchain.chains import SequentialChain
-from langsmith import traceable
+from langsmith import traceable, trace
 
 # Import the individual chains
 from chains.chain_wins import impact_highlights_chain
@@ -39,7 +39,6 @@ if not openai_api_key:
 @traceable(name="sequential_chain_creation", tags=["setup", "chain-creation"], run_type="chain")
 def create_master_sequential_chain():
     """Create and return the master SequentialChain that combines all chains."""
-    from langsmith import trace
     
     # Generate unique execution ID for this chain creation
     execution_id = str(uuid.uuid4())
