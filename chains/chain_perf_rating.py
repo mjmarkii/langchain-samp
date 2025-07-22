@@ -44,7 +44,7 @@ class TracedPerformanceRatingChain(LLMChain):
             "analysis_focus": "quantitative_performance_assessment"
         }
         
-        with trace(name="performance_rating_execution", metadata=metadata):
+        with trace(name="performance_rating_execution", tags=["chain_perf_rating"], metadata=metadata):
             return super().__call__(inputs, return_only_outputs, callbacks, **kwargs)
 
 def create_perf_rating_chain():

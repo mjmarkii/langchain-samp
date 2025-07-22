@@ -43,7 +43,7 @@ class TracedExecutionOwnershipChain(LLMChain):
             "analysis_focus": "work_quality_and_ownership"
         }
         
-        with trace(name="execution_ownership_execution", metadata=metadata):
+        with trace(name="execution_ownership_execution", tags=["chain_work"], metadata=metadata):
             return super().__call__(inputs, return_only_outputs, callbacks, **kwargs)
 
 def create_work_chain():
