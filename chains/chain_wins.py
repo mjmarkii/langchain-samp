@@ -46,7 +46,7 @@ class TracedImpactHighlightsChain(LLMChain):
             "analysis_focus": "positive_performance_patterns"
         }
         
-        with trace(name="impact_highlights_execution", metadata=metadata):
+        with trace(name="impact_highlights_execution", tags=["chain_wins"], metadata=metadata):
             return super().__call__(inputs, return_only_outputs, callbacks, **kwargs)
 
 def create_wins_chain():

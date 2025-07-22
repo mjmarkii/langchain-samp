@@ -46,7 +46,7 @@ class TracedActionPlanChain(LLMChain):
             "analysis_focus": "actionable_recommendations"
         }
         
-        with trace(name="action_plan_execution", metadata=metadata):
+        with trace(name="action_plan_execution", tags=["chain_action_plan"], metadata=metadata):
             return super().__call__(inputs, return_only_outputs, callbacks, **kwargs)
 
 def create_action_plan_chain():

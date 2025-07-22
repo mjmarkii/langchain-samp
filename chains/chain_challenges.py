@@ -46,7 +46,7 @@ class TracedGapsGrowthAreasChain(LLMChain):
             "analysis_focus": "improvement_opportunities"
         }
         
-        with trace(name="gaps_growth_areas_execution", metadata=metadata):
+        with trace(name="gaps_growth_areas_execution", tags=["chain_challenges"], metadata=metadata):
             return super().__call__(inputs, return_only_outputs, callbacks, **kwargs)
 
 def create_challenges_chain():
