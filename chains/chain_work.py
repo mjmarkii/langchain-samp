@@ -33,6 +33,8 @@ class TracedExecutionOwnershipChain(LLMChain):
     @traceable(tags=["prompt-analysis", "work", "execution-ownership"], run_type="llm")
     def __call__(self, inputs, return_only_outputs=False, callbacks=None, **kwargs):
         """Execute with metadata for LangSmith tracing."""
+        print("Running chain 2/6: Execution and Ownership...")
+        
         from langsmith import trace
         
         # Add metadata for this specific prompt execution

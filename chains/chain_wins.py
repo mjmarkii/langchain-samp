@@ -33,6 +33,8 @@ class TracedImpactHighlightsChain(LLMChain):
     @traceable(tags=["prompt-analysis", "wins", "impact-highlights"], run_type="llm")
     def __call__(self, inputs, return_only_outputs=False, callbacks=None, **kwargs):
         """Execute with metadata for LangSmith tracing."""
+        print("Running chain 1/6: Impact Highlights...")
+        
         from langsmith import trace
         
         # Add metadata for this specific prompt execution

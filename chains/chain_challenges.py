@@ -33,6 +33,8 @@ class TracedGapsGrowthAreasChain(LLMChain):
     @traceable(tags=["prompt-analysis", "challenges", "gaps-growth"], run_type="llm")
     def __call__(self, inputs, return_only_outputs=False, callbacks=None, **kwargs):
         """Execute with metadata for LangSmith tracing."""
+        print("Running chain 3/6: Gaps and Growth Areas...")
+        
         from langsmith import trace
         
         # Add metadata for this specific prompt execution
