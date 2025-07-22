@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.chains import SequentialChain
 from langsmith import traceable
-from langsmith.run_helpers import trace
 
 # Import the individual chains
 from chains.chain_wins import impact_highlights_chain
@@ -37,61 +36,64 @@ else:
 if not openai_api_key:
     raise ValueError("Please set your OPENAI_API_KEY in the .env file.")
 
-# LANGSMITH TRACING FUNCTION
-@traceable(name="performance_review_generation", tags=["performance", "review"], run_type="llm")
-def generate_performance_review(chain_inputs, chain, session_id):
-    """Generate performance review with LangSmith tracing."""
-    # Create metadata with only the key fields (excluding long text inputs)
-    metadata = {
-        "session_id": session_id,
-        "manager": chain_inputs["manager"],
-        "team_member": chain_inputs["team_member"],
-        "role": chain_inputs["role"],
-        "date_range": chain_inputs["date_range"]
-    }
-    
-    with trace(name="chain_execution", metadata=metadata):
-        return chain(chain_inputs)
-
-# Create the master sequential chain
+@traceable(name="sequential_chain_creation", tags=["setup", "chain-creation"], run_type="chain")
 def create_master_sequential_chain():
     """Create and return the master SequentialChain that combines all chains."""
-    print("Creating master sequential chain...")
+    from langsmith import trace
     
-    # Create the sequential chain that combines all chains
-    master_chain = SequentialChain(
-        chains=[
-            impact_highlights_chain, 
-            execution_ownership_chain, 
-            gaps_growth_areas_chain,
-            performance_rating_chain,
-            action_plan_chain,
-            executive_summary_chain
-        ],
-        input_variables=[
-            "manager", 
-            "team_member",
-            "role", 
-            "date_range", 
-            "daily_text", 
-            "claap_text", 
-            "fathom_text", 
-            "jira_text"
-        ],
-        output_variables=[
-            "impact_highlights",
-            "execution_ownership", 
-            "gaps_growth_areas", 
-            "performance_rating", 
-            "action_plan", 
-            "executive_summary"
-        ],
-        verbose=True
-    )
+    # Generate unique execution ID for this chain creation
+    execution_id = str(uuid.uuid4())
+    print(f"Creating master sequential chain - Execution ID: {execution_id}")
     
-    return master_chain
+    # Add execution ID to trace metadata
+    metadata = {
+        "execution_id": execution_id,
+        "operation": "sequential_chain_creation",
+        "total_chains": 6,  # Back to all chains
+        "chain_names": ["impact_highlights", "execution_ownership", "gaps_growth_areas", "performance_rating", "action_plan", "executive_summary"]
+    }
+    
+    with trace(name="chain_setup_execution", metadata=metadata):
+        # Create the sequential chain that combines all chains
+        master_chain = SequentialChain(
+            chains=[
+                impact_highlights_chain,
+                execution_ownership_chain, 
+                gaps_growth_areas_chain,
+                performance_rating_chain,
+                action_plan_chain,
+                executive_summary_chain
+            ],
+            input_variables=[
+                "manager", 
+                "team_member",
+                "role", 
+                "date_range", 
+                "daily_text", 
+                "claap_text", 
+                "fathom_text", 
+                "jira_text"
+            ],
+            output_variables=[
+                "impact_highlights",
+                "execution_ownership", 
+                "gaps_growth_areas", 
+                "performance_rating", 
+                "action_plan", 
+                "executive_summary"
+            ],
+            verbose=True
+        )
+        
+        print(f"Sequential chain created successfully - Execution ID: {execution_id}")
+        return master_chain
 
-# run the master chain
+@traceable(name="performance_review_execution", tags=["execution", "performance-review"], run_type="chain")
+def execute_performance_review(chain_inputs, chain, session_id):
+    """Execute the performance review chain with tracing."""
+    return chain(chain_inputs)
+
+@traceable(name="master_orchestrator", tags=["orchestrator", "end-to-end"], run_type="chain") 
 def run_master_chain():
     """Run the master chain with the input variables and handle output."""
     
@@ -116,7 +118,7 @@ def run_master_chain():
     }
     
     # Run the chain with LangSmith tracing
-    result = generate_performance_review(chain_inputs, master_chain, session_id)
+    result = execute_performance_review(chain_inputs, master_chain, session_id)
     
     print("All chains completed!")
     
