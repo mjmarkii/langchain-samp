@@ -10,7 +10,7 @@ from langchain.chains import LLMChain
 from langsmith import traceable, trace
 
 from variables import *
-from prompts import final_report as fr
+from prompts.final_report import SYSTEM_PROMPT, USER_PROMPT
 
 # Read the contents of output.py
 try:
@@ -59,13 +59,9 @@ def create_final_report_chain():
     llm = ChatOpenAI(model="gpt-4.1", temperature=0)
 
     # Create the prompt template combining system and human messages
-    # Get the prompts from the final_report module
-    system_message = fr.SYSTEM_PROMPT
-    human_message_template = fr.USER_PROMPT
-
     chat_prompt = ChatPromptTemplate.from_messages([
-        SystemMessagePromptTemplate.from_template(system_message),
-        HumanMessagePromptTemplate.from_template(human_message_template)
+        SystemMessagePromptTemplate.from_template(SYSTEM_PROMPT),
+        HumanMessagePromptTemplate.from_template(USER_PROMPT)
     ])
 
     # Create and return the LangChain processing chain
