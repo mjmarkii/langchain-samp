@@ -31,7 +31,7 @@ def create_perf_rating_chain():
     print("Creating performance rating chain...")
 
     # Initialize OpenAI reasoning model with specific configuration
-    llm = ChatOpenAI(model="o4-mini", temperature=0)
+    llm = ChatOpenAI(model="o4-mini", temperature=1)
 
     # Create the prompt template combining system and human messages
     chat_prompt = ChatPromptTemplate.from_messages([

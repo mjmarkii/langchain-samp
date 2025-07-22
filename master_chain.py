@@ -8,9 +8,12 @@ from langsmith import traceable
 from langsmith.run_helpers import trace
 
 # Import the individual chains
-from chain_wins_work_challenges import chain1
-from chain_rating_action_plan import chain2
-from chain_executive_summary import chain3
+from chains.chain_wins import impact_highlights_chain
+from chains.chain_work import execution_ownership_chain
+from chains.chain_challenges import gaps_growth_areas_chain
+from chains.chain_perf_rating import performance_rating_chain
+from chains.chain_action_plan import action_plan_chain
+from chains.chain_executive_summary import executive_summary_chain
 
 # Import variables and data sources
 from variables import *
@@ -20,7 +23,7 @@ from datasource import *
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 langsmith_api_key = os.getenv("LANGSMITH_API_KEY")
-langsmith_project = os.getenv("LANGSMITH_PROJECT", "master-chain-generator")
+langsmith_project = os.getenv("LANGSMITH_PROJECT", "performance-review-generator")
 
 # Set up LangSmith
 if langsmith_api_key:
@@ -52,12 +55,19 @@ def generate_performance_review(chain_inputs, chain, session_id):
 
 # Create the master sequential chain
 def create_master_sequential_chain():
-    """Create and return the master SequentialChain that combines all three chains."""
+    """Create and return the master SequentialChain that combines all chains."""
     print("Creating master sequential chain...")
     
-    # Create the sequential chain that combines all three chains
+    # Create the sequential chain that combines all chains
     master_chain = SequentialChain(
-        chains=[chain1, chain2, chain3],
+        chains=[
+            impact_highlights_chain, 
+            execution_ownership_chain, 
+            gaps_growth_areas_chain,
+            performance_rating_chain,
+            action_plan_chain,
+            executive_summary_chain
+        ],
         input_variables=[
             "manager", 
             "team_member",
@@ -69,8 +79,11 @@ def create_master_sequential_chain():
             "jira_text"
         ],
         output_variables=[
-            "wins_work_challenges",
-            "rating_action_plan", 
+            "impact_highlights",
+            "execution_ownership", 
+            "gaps_growth_areas", 
+            "performance_rating", 
+            "action_plan", 
             "executive_summary"
         ],
         verbose=True
@@ -117,22 +130,21 @@ if __name__ == "__main__":
         # Write results to output.py
         print("Writing results to output.py...")
 
-        # Clear output.py first
+        # Prepare all content first
+        output_sections = [
+            ("Impact Highlights", result['impact_highlights']),
+            ("Execution and Ownership", result['execution_ownership']),
+            ("Gaps and Growth Areas", result['gaps_growth_areas']),
+            ("Performance Rating", result['performance_rating']),
+            ("Action Plan", result['action_plan']),
+            ("Executive Summary", result['executive_summary'])
+        ]
+        
+        # Write all content in a single operation
         with open("output.py", "w", encoding="utf-8") as f:
-            f.write("")
-        
-        # Append each result to output.py
-        print("Appending Wins Work Challenges result...")
-        with open("output.py", "a", encoding="utf-8") as f:
-            f.write(f"{result['wins_work_challenges']}\n\n")
-        
-        print("Appending Rating Action Plan result...")
-        with open("output.py", "a", encoding="utf-8") as f:
-            f.write(f"{result['rating_action_plan']}\n\n")
-        
-        print("Appending Executive Summary result...")
-        with open("output.py", "a", encoding="utf-8") as f:
-            f.write(f"{result['executive_summary']}\n\n")
+            for section_name, content in output_sections:
+                print(f"Adding {section_name} result...")
+                f.write(f"{content}\n\n")
         
         print("Results successfully written to output.py!")
         print("Master chain execution completed successfully!")

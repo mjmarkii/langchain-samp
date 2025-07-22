@@ -31,7 +31,7 @@ def create_action_plan_chain():
     print("Creating manager action plan chain...")
 
     # Initialize OpenAI reasoning model with specific configuration
-    llm = ChatOpenAI(model="o4-mini", temperature=0)
+    llm = ChatOpenAI(model="o4-mini", temperature=1)
 
     # Create the prompt template combining system and human messages
     chat_prompt = ChatPromptTemplate.from_messages([
