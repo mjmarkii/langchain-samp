@@ -192,7 +192,7 @@ This report is designed to support a high-impact 1-on-1 conversation between the
 
 ### 🌟 Impact Highlights
 
-Identify and describe up to 5 **standout contributions** made by **{team_member}** during **{date_range}**, with a focus on how those contributions created **visible value** for the team or project.
+Identify and describe **standout contributions** made by **{team_member}** during **{date_range}**, with a focus on how those contributions created **visible value** for the team or project.
 
 Instructions:
 - Reflect not only on **what was achieved**, but **how** it was achieved.
