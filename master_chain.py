@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 from langchain_openai import ChatOpenAI
 from langchain.chains import SequentialChain
+from langchain.memory import SimpleMemory
 from langsmith import traceable, trace
 
 # Import the individual chains
@@ -15,8 +16,11 @@ from chains.chain_action_plan import action_plan_chain
 from chains.chain_executive_summary import executive_summary_chain
 
 # Import variables and data sources
-from variables import *
-from datasource import *
+from variables import MANAGER, TEAM_MEMBER, ROLE_TEAM_MEMBER, DATE_RANGE
+from datasource import DAILY_TEXT, CLAAP_TEXT, FATHOM_TEXT, JIRA_TEXT
+
+# Import the context builder (inout files)
+from context_builder import build_source_context
 
 # Load environment variables from .env
 load_dotenv()
@@ -37,7 +41,7 @@ if not openai_api_key:
     raise ValueError("Please set your OPENAI_API_KEY in the .env file.")
 
 @traceable(name="sequential_chain_creation", tags=["setup", "chain-creation"], run_type="chain")
-def create_master_sequential_chain():
+def create_master_sequential_chain(source_context):
     """Create and return the master SequentialChain that combines all chains."""
     
     # Generate unique execution ID for this chain creation
@@ -51,6 +55,9 @@ def create_master_sequential_chain():
         "total_chains": 6,  # Back to all chains
         "chain_names": ["impact_highlights", "execution_ownership", "gaps_growth_areas", "performance_rating", "action_plan", "executive_summary"]
     }
+
+    # Set up shared memory
+    shared_memory = SimpleMemory(memories={"source_context": source_context})
     
     with trace(name="chain_setup_execution", metadata=metadata):
         # Create the sequential chain that combines all chains
@@ -67,11 +74,7 @@ def create_master_sequential_chain():
                 "manager", 
                 "team_member",
                 "role", 
-                "date_range", 
-                "daily_text", 
-                "claap_text", 
-                "fathom_text", 
-                "jira_text"
+                "date_range"
             ],
             output_variables=[
                 "impact_highlights",
@@ -81,6 +84,7 @@ def create_master_sequential_chain():
                 "action_plan", 
                 "executive_summary"
             ],
+            memory=shared_memory,
             verbose=True
         )
         
@@ -95,9 +99,12 @@ def execute_performance_review(chain_inputs, chain, session_id):
 @traceable(name="master_orchestrator", tags=["orchestrator", "end-to-end"], run_type="chain") 
 def run_master_chain():
     """Run the master chain with the input variables and handle output."""
+
+    # Build the source context
+    source_context = build_source_context(DAILY_TEXT, CLAAP_TEXT, FATHOM_TEXT, JIRA_TEXT)
     
     # Create the master chain
-    master_chain = create_master_sequential_chain()
+    master_chain = create_master_sequential_chain(source_context)
     
     print("Running each chain in sequence...")
     
@@ -110,10 +117,7 @@ def run_master_chain():
         "team_member": TEAM_MEMBER,
         "role": ROLE_TEAM_MEMBER,
         "date_range": DATE_RANGE,
-        "daily_text": DAILY_TEXT,
-        "claap_text": CLAAP_TEXT,
-        "fathom_text": FATHOM_TEXT,
-        "jira_text": JIRA_TEXT
+        "source_context": source_context
     }
     
     # Run the chain with LangSmith tracing
@@ -151,4 +155,4 @@ if __name__ == "__main__":
         print("Master chain execution completed successfully!")
     except Exception as e:
         print(f"Error running master chain: {str(e)}")
-        raise 
+        raise

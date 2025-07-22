@@ -21,31 +21,7 @@ Your goal is to **analyze source files and produce a concise, neutral report tha
 
 Analyze the following sources in combination:
 
-#### Daily Status Updates:
-<<START OF DAILY STATUS UPDATES>>
-{daily_text}
-<<END OF DAILY STATUS UPDATES>>
-
----
-
-#### Claap Transcripts:
-<<START OF CLAAP TRANSCRIPTS>>
-{claap_text}
-<<END OF CLAAP TRANSCRIPTS>>
-
----
-
-#### Fathom Transcripts:
-<<START OF FATHOM TRANSCRIPTS>>
-{fathom_text}
-<<END OF FATHOM TRANSCRIPTS>>
-
----
-
-#### JIRA Tickets:
-<<START OF JIRA TICKETS>>
-{jira_text}
-<<END OF JIRA TICKETS>>
+{source_context}
 
 ---
 
