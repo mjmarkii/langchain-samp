@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain.chains import LLMChain
+from langsmith import traceable
 
 from prompts.prompt_action_plan import SYSTEM_PROMPT, USER_PROMPT
 
@@ -26,10 +27,31 @@ else:
 if not openai_api_key:
     raise ValueError("Please set your OPENAI_API_KEY in the .env file.")
 
+class TracedActionPlanChain(LLMChain):
+    """LLMChain wrapper that adds metadata to execution traces."""
+    
+    @traceable(tags=["prompt-analysis", "planning", "action-plan"], run_type="llm")
+    def __call__(self, inputs, return_only_outputs=False, callbacks=None, **kwargs):
+        """Execute with metadata for LangSmith tracing."""
+        from langsmith import trace
+        
+        # Add metadata for this specific prompt execution
+        metadata = {
+            "chain_name": "action_plan",
+            "prompt_type": "planning_analysis",
+            "model": "o4-mini",
+            "temperature": 1,
+            "expected_output": "action_plan",
+            "analysis_focus": "actionable_recommendations"
+        }
+        
+        with trace(name="action_plan_execution", metadata=metadata):
+            return super().__call__(inputs, return_only_outputs, callbacks, **kwargs)
+
 def create_action_plan_chain():
     """Create and return the manager action plan LLMChain."""
     print("Creating manager action plan chain...")
-
+    
     # Initialize OpenAI reasoning model with specific configuration
     llm = ChatOpenAI(model="o4-mini", temperature=1)
 
@@ -39,8 +61,8 @@ def create_action_plan_chain():
         HumanMessagePromptTemplate.from_template(USER_PROMPT)
     ])
 
-    # Create and return the LangChain processing chain
-    chain = LLMChain(llm=llm, prompt=chat_prompt, output_key="action_plan")
+    # Create and return the traced LangChain processing chain
+    chain = TracedActionPlanChain(llm=llm, prompt=chat_prompt, output_key="action_plan")
 
     return chain
 
